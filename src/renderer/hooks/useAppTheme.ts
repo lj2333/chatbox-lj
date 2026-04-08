@@ -6,6 +6,18 @@ import { type Language, Theme } from '../../shared/types'
 import platform from '../platform'
 import DesktopPlatform from '../platform/desktop_platform'
 
+const DEFAULT_APP_FONT_FAMILY =
+  '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif'
+const ARABIC_APP_FONT_FAMILY = 'Cairo, Arial, sans-serif'
+
+export function getAppFontFamily(fontFamily: string | undefined, language: Language) {
+  const customFontFamily = fontFamily?.trim()
+  if (customFontFamily) {
+    return customFontFamily
+  }
+  return language === 'ar' ? ARABIC_APP_FONT_FAMILY : DEFAULT_APP_FONT_FAMILY
+}
+
 export const switchTheme = async (theme: Theme) => {
   let finalTheme = 'light' as 'light' | 'dark'
   if (theme === Theme.System) {
@@ -25,6 +37,7 @@ export const switchTheme = async (theme: Theme) => {
 export default function useAppTheme() {
   const theme = useSettingsStore((state) => state.theme)
   const fontSize = useSettingsStore((state) => state.fontSize)
+  const fontFamily = useSettingsStore((state) => state.fontFamily)
   const realTheme = useUIStore((state) => state.realTheme)
   const language = useLanguage()
 
@@ -49,6 +62,10 @@ export default function useAppTheme() {
       document.documentElement.classList.remove('dark')
     }
   }, [realTheme])
+
+  useLayoutEffect(() => {
+    document.documentElement.style.setProperty('--chatbox-font-family', getAppFontFamily(fontFamily, language))
+  }, [fontFamily, language])
 
   const themeObj = useMemo(
     () => createTheme(getThemeDesign(realTheme, fontSize, language)),
@@ -82,13 +99,7 @@ export function getThemeDesign(realTheme: 'light' | 'dark', fontSize: number, la
       },
     },
     typography: {
-      // In Chinese and Japanese the characters are usually larger,
-      // so a smaller fontsize may be appropriate.
-      ...(language === 'ar'
-        ? {
-            fontFamily: 'Cairo, Arial, sans-serif',
-          }
-        : {}),
+      fontFamily: 'var(--chatbox-font-family)',
       fontSize: (fontSize * 14) / 16,
     },
     direction: language === 'ar' ? 'rtl' : 'ltr',

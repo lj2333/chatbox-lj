@@ -309,6 +309,7 @@ const creteMantineTheme = (scale = 1) =>
   createTheme({
     /** Put your mantine theme override here */
     scale,
+    fontFamily: 'var(--chatbox-font-family)',
     primaryColor: 'chatbox-brand',
     colors: {
       'chatbox-brand': colorsTuple(Array.from({ length: 10 }, () => 'var(--chatbox-tint-brand)')),
@@ -322,6 +323,7 @@ const creteMantineTheme = (scale = 1) =>
       'chatbox-tertiary': colorsTuple(Array.from({ length: 10 }, () => 'var(--chatbox-tint-tertiary)')),
     },
     headings: {
+      fontFamily: 'var(--chatbox-font-family)',
       fontWeight: 'Bold',
       sizes: {
         h1: {

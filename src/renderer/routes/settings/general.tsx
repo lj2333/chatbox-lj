@@ -118,6 +118,23 @@ export function RouteComponent() {
           />
         </Stack>
 
+        <Stack gap="xxs">
+          <Text>{t('Custom Font Family')}</Text>
+          <TextInput
+            maw={420}
+            value={settings.fontFamily || ''}
+            placeholder={'"PingFang SC", "Microsoft YaHei", sans-serif'}
+            onChange={(e) =>
+              setSettings({
+                fontFamily: e.currentTarget.value,
+              })
+            }
+          />
+          <Text size="xs" c="chatbox-tertiary">
+            {t('Leave empty to use the system default font. Example: "PingFang SC", "Microsoft YaHei", sans-serif')}
+          </Text>
+        </Stack>
+
         {/* Startup Page */}
         <Stack>
           <Text>{t('Startup Page')}</Text>
