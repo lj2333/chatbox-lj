@@ -27,13 +27,6 @@ jobs:
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
 
-      - name: Setup Java
-        uses: actions/setup-java@v5
-        with:
-          distribution: temurin
-          java-version: 21
-          cache: gradle
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -42,6 +35,13 @@ jobs:
           if [ ! -d android ]; then
             pnpm exec cap add android
           fi
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
 
       - name: Sync Android assets
         run: pnpm run mobile:sync:android
